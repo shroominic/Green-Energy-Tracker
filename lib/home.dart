@@ -18,7 +18,7 @@ class _MyHomePageState extends State<MyHomePage> {
   var _data = 'zero';
 
   void _refresh() async {
-    var data = await smard.getData();
+    var data = await smard.requestData();
     setState(() {
       _data = data;
     });

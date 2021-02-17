@@ -2,10 +2,12 @@ import 'package:http/http.dart';
 import 'dart:convert';
 
 class SmardData {
-  SmardData() {}
+  SmardData();
 
   Future<String> requestData(
-      int fromInHoursAgoNow, int toInHoursAfterNow, Modul modul) async {
+      {int fromInHoursAgoNow = 5,
+      int toInHoursAfterNow = 0,
+      Modul modul = Modul.price}) async {
     var time = DateTime.now().millisecondsSinceEpoch;
     var url =
         "https://www.smard.de/nip-download-manager/nip/download/market-data";
@@ -16,7 +18,7 @@ class SmardData {
         modules = [6000411, 6004362];
         break;
       case Modul.price:
-        modules = [8004169, 8004170];
+        modules = [8004169];
         break;
     }
 
@@ -42,7 +44,7 @@ class SmardData {
     return response.body;
   }
 
-  int getCurrentGreenEnergyPercentage() {}
+  //int getCurrentGreenEnergyPercentage() {}
 }
 
 enum Modul {
