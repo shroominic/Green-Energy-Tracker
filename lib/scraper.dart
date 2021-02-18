@@ -1,5 +1,6 @@
 import 'package:http/http.dart';
 import 'dart:convert';
+import 'package:df/df.dart';
 
 class SmardData {
   SmardData();
@@ -14,7 +15,7 @@ class SmardData {
 
     List modules;
     switch (modul) {
-      case Modul.consumptio:
+      case Modul.consumption:
         modules = [6000411, 6004362];
         break;
       case Modul.price:
@@ -49,5 +50,5 @@ class SmardData {
 
 enum Modul {
   price,
-  consumptio,
+  consumption,
 }
