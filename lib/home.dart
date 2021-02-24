@@ -15,12 +15,12 @@ class _MyHomePageState extends State<MyHomePage> {
 
   final title = "Green Energy Tracker";
 
-  var _data = 'zero';
+  var _data = "0";
 
   void _refresh() async {
-    var data = await smard.requestData();
+    var data = await smard.getCurrentGreenEnergyPercentage();
     setState(() {
-      _data = data;
+      _data = data.toString();
     });
   }
 
@@ -35,7 +35,8 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-              '$_data',
+              '$_data %',
+              style: TextStyle(fontSize: 69, fontWeight: FontWeight.bold),
             ),
           ],
         ),
