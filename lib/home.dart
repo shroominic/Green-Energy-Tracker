@@ -32,12 +32,51 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              '$_data %',
-              style: TextStyle(fontSize: 69, fontWeight: FontWeight.bold),
+          children: [
+            Spacer(
+              flex: 1,
             ),
+            Container(
+              decoration: BoxDecoration(
+                  color: Colors.green[800],
+                  borderRadius: BorderRadius.circular(10)),
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Text(
+                      'Anteil der Erneuerbaren Energien:',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                    Row(
+                      children: [
+                        Text(
+                          '$_data',
+                          style: TextStyle(
+                            fontSize: 69,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                        Text(
+                          '%',
+                          style: TextStyle(
+                            fontFamily: '',
+                            fontStyle: FontStyle.normal,
+                          ),
+                        )
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Spacer(),
           ],
         ),
       ),
