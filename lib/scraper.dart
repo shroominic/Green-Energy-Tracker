@@ -105,7 +105,7 @@ Map<String, List<dynamic>> csvToMap(String csv) {
 
   for (int i = 0; i < (csvList[0].length); i++) {
     List data = [];
-    for (int j = 1; j < (csvList.length - 1); j++) {
+    for (int j = 1; j < (csvList.length); j++) {
       data.add(csvList[j][i]);
     }
     result.putIfAbsent(csvList[0][i], () => data);
@@ -158,8 +158,8 @@ class SmardData {
 
     Response response = await post(url,
         body: body, headers: {"Content-Type": "application/json"});
-
-    return response.body;
+    String result = response.body.replaceAll('.', '');
+    return result;
   }
 
   Future<double> getCurrentGreenEnergyPercentage() async {
@@ -197,10 +197,13 @@ class SmardData {
           break;
         }
       }
+      print('$index: $energy');
       ePowerGen += energy;
     });
     forecastedRenewable.forEach((index) {
-      ePowerGen += forecastedGeneration[index].last;
+      double energy = (forecastedGeneration[index].last).toDouble();
+      print('$index: $energy');
+      ePowerGen += energy;
     });
     conventional.forEach((index) {
       double energy;
@@ -211,8 +214,12 @@ class SmardData {
           break;
         }
       }
+      print('$index: $energy');
       kPowerGen += energy;
     });
+
+    print('e: $ePowerGen');
+    print('k: $kPowerGen');
 
     double percentage = double.parse(
         (ePowerGen / (ePowerGen + kPowerGen) * 100).toStringAsFixed(1));
