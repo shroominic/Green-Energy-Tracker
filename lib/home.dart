@@ -14,14 +14,15 @@ class _MyHomePageState extends State<MyHomePage> {
   _MyHomePageState(this.datamanager);
   final DataManager datamanager;
 
+  // AppBar Text
   final title = "Green Energy Tracker";
 
-  var _data = "0";
+  // share of renewable energies
+  var _percentage = "0";
 
-  void _refresh() async {
-    var data = await scraper.getCurrentGreenEnergyPercentage();
+  set percentage(String percentage) {
     setState(() {
-      _data = data.toString();
+      _percentage = percentage;
     });
   }
 
@@ -32,59 +33,70 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(title),
       ),
       body: Center(
-        child: Column(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Spacer(
-              flex: 1,
-            ),
-            Container(
-              decoration: BoxDecoration(
-                  color: Colors.green[800],
-                  borderRadius: BorderRadius.circular(10)),
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    Text(
-                      'Anteil der Erneuerbaren Energien:',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
-                    Row(
-                      children: [
-                        Text(
-                          '$_data',
-                          style: TextStyle(
-                            fontSize: 69,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                        ),
-                        Text(
-                          '%',
-                          style: TextStyle(
-                            fontFamily: '',
-                            fontStyle: FontStyle.normal,
-                          ),
-                        )
-                      ],
-                    ),
-                  ],
+            Column(
+              children: [
+                Spacer(
+                  flex: 1,
                 ),
-              ),
+                Container(
+                  decoration: BoxDecoration(
+                      color: Colors.green[800],
+                      borderRadius: BorderRadius.circular(10)),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: FutureBuilder(
+                        future: scraper.getCurrentGreenEnergyPercentage(),
+                        builder: (context, snapshot) {
+                          // filter null values
+                          if (snapshot.data != null) {
+                            _percentage = snapshot.data.toString();
+                          }
+                          return Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              Text(
+                                'Anteil der Erneuerbaren Energien:',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    '$_percentage',
+                                    style: TextStyle(
+                                      fontSize: 69,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  Text(
+                                    '%',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 42,
+                                      fontFamily: '',
+                                      fontStyle: FontStyle.italic,
+                                    ),
+                                  ),
+                                ],
+                              )
+                            ],
+                          );
+                        }),
+                  ),
+                ),
+                Spacer(),
+              ],
             ),
-            Spacer(),
           ],
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _refresh,
-        tooltip: 'Increment',
-        child: Icon(Icons.refresh),
       ),
     );
   }
