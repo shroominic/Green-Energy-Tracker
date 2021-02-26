@@ -2,7 +2,8 @@ import 'package:http/http.dart';
 import 'dart:convert';
 import 'package:csv/csv.dart';
 
-// API Modul Constants
+// Smard API Modul Constants
+//
 // power generation
 const List REALIZED_POWER_GENERATION = [
   1001224,
@@ -39,11 +40,9 @@ const List FORECASTED_POWER_GENERATION = [
   2003791,
   2000123
 ];
-
 // power consumption
 const List FORECASTED_POWER_CONSUMPTION = [6000411, 6004362];
 const List REALIZED_POWER_CONSUMPTION = [5000410, 5004359];
-
 // market
 const List WHOLESALE_PRICES = [
   8004169,
@@ -99,6 +98,7 @@ const List PHYSICAL_POWER_FLOW = [
   31000141
 ];
 
+// Modul names for request() funktion
 enum Modul {
   price,
   consumption,
@@ -106,6 +106,7 @@ enum Modul {
   forecasted_generation,
 }
 
+// Converts CSV String to Map Data Structure
 Map<String, List<dynamic>> csvToMap(String csv) {
   List<List<dynamic>> csvList =
       CsvToListConverter().convert(csv, fieldDelimiter: ';');
@@ -121,22 +122,22 @@ Map<String, List<dynamic>> csvToMap(String csv) {
   return result;
 }
 
-
+// collects data from Smard.de
+// Return: CSV String (Future)
+// Method: HTTP Post Request
 Future<String> requestData(
+    // default values
     {int fromInHoursAgoNow = 24,
     int toInHoursAfterNow = 0,
     Modul modul = Modul.price}) async {
-  var time = DateTime.now().millisecondsSinceEpoch;
-  var url =
-      "https://www.smard.de/nip-download-manager/nip/download/market-data";
-
+  // not complete
   List modules;
   switch (modul) {
     case Modul.consumption:
       modules = FORECASTED_POWER_CONSUMPTION;
       break;
     case Modul.price:
-      modules = WHOLESALE_PRICES[0];
+      modules = WHOLESALE_PRICES;
       break;
     case Modul.generation:
       modules = REALIZED_POWER_GENERATION;
@@ -146,6 +147,12 @@ Future<String> requestData(
       break;
   }
 
+  // current unix timestamp
+  var time = DateTime.now().millisecondsSinceEpoch;
+  // request url
+  var url =
+      "https://www.smard.de/nip-download-manager/nip/download/market-data";
+  // request body
   var body = json.encode({
     "request_form": [
       {
@@ -161,13 +168,16 @@ Future<String> requestData(
       }
     ]
   });
-
+  // http post response
   Response response = await post(url,
       body: body, headers: {"Content-Type": "application/json"});
+
+  // remove all points to prevent float bugs
   String result = response.body.replaceAll('.', '');
   return result;
 }
 
+// calculates current share of green energy
 Future<double> getCurrentGreenEnergyPercentage() async {
   Map generation = csvToMap(await requestData(modul: Modul.generation));
   Map forecastedGeneration =
@@ -232,6 +242,3 @@ Future<double> getCurrentGreenEnergyPercentage() async {
 
   return percentage;
 }
-
-
-
