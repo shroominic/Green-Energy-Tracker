@@ -230,13 +230,8 @@ Future<double> getCurrentGreenEnergyPercentage() async {
         break;
       }
     }
-    print('$index: $energy');
     kPowerGen += energy;
   });
-
-  print('e: $ePowerGen');
-  print('k: $kPowerGen');
-
   double percentage = double.parse(
       (ePowerGen / (ePowerGen + kPowerGen) * 100).toStringAsFixed(1));
 
