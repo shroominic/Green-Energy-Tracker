@@ -1,24 +1,25 @@
 import 'package:flutter/material.dart';
-import 'scraper.dart';
+import 'scraper.dart' as scraper;
+import 'data_manager.dart';
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage(this.smard, {Key key}) : super(key: key);
-  final SmardData smard;
+  MyHomePage(this.datamanager, {Key key}) : super(key: key);
+  final DataManager datamanager;
 
   @override
-  _MyHomePageState createState() => _MyHomePageState(smard);
+  _MyHomePageState createState() => _MyHomePageState(datamanager);
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  _MyHomePageState(this.smard);
-  final SmardData smard;
+  _MyHomePageState(this.datamanager);
+  final DataManager datamanager;
 
   final title = "Green Energy Tracker";
 
   var _data = "0";
 
   void _refresh() async {
-    var data = await smard.getCurrentGreenEnergyPercentage();
+    var data = await scraper.getCurrentGreenEnergyPercentage();
     setState(() {
       _data = data.toString();
     });

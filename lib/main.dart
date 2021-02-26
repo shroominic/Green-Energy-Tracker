@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'home.dart';
-import 'scraper.dart';
+import 'data_manager.dart';
 
 void main() {
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  final SmardData smard = new SmardData();
+  final DataManager datamanager = new DataManager();
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.green,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: MyHomePage(smard),
+      home: MyHomePage(datamanager),
     );
   }
 }
