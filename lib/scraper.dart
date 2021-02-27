@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'dart:convert';
 import 'package:csv/csv.dart';
@@ -125,11 +126,7 @@ Map<String, List<dynamic>> csvToMap(String csv) {
 // collects data from Smard.de
 // Return: CSV String (Future)
 // Method: HTTP Post Request
-Future<String> requestData(
-    // default values
-    {int fromInHoursAgoNow = 24,
-    int toInHoursAfterNow = 0,
-    Modul modul = Modul.price}) async {
+Future<String> requestData(DateTimeRange dateTimeRange, Modul modul) async {
   // not complete
   List modules;
   switch (modul) {
@@ -146,9 +143,6 @@ Future<String> requestData(
       modules = FORECASTED_POWER_GENERATION;
       break;
   }
-
-  // current unix timestamp
-  var time = DateTime.now().millisecondsSinceEpoch;
   // request url
   var url =
       "https://www.smard.de/nip-download-manager/nip/download/market-data";
@@ -159,15 +153,16 @@ Future<String> requestData(
         "format": "CSV",
         "moduleIds": modules,
         "region": "DE",
-        "timestamp_from":
-            time - Duration(hours: fromInHoursAgoNow).inMilliseconds,
-        "timestamp_to":
-            time + Duration(hours: toInHoursAfterNow).inMilliseconds,
+        "timestamp_from": dateTimeRange.start.millisecondsSinceEpoch,
+        "timestamp_to": dateTimeRange.end.millisecondsSinceEpoch,
         "type": "discrete",
         "language": "de"
       }
     ]
   });
+
+  print(dateTimeRange.start.millisecondsSinceEpoch);
+
   // http post response
   Response response = await post(url,
       body: body, headers: {"Content-Type": "application/json"});
@@ -179,9 +174,12 @@ Future<String> requestData(
 
 // calculates current share of green energy
 Future<double> getCurrentGreenEnergyPercentage() async {
-  Map generation = csvToMap(await requestData(modul: Modul.generation));
+  // time range from yesterday to now
+  DateTimeRange dateTimeRange = DateTimeRange(
+      start: DateTime.now().subtract(Duration(days: 1)), end: DateTime.now());
+  Map generation = csvToMap(await requestData(dateTimeRange, Modul.generation));
   Map forecastedGeneration =
-      csvToMap(await requestData(modul: Modul.forecasted_generation));
+      csvToMap(await requestData(dateTimeRange, Modul.forecasted_generation));
 
   List renewable = [
     'Biomasse[MWh]',
