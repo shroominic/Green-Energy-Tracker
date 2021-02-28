@@ -124,9 +124,10 @@ Map<String, List<dynamic>> csvToMap(String csv) {
 }
 
 // collects data from Smard.de
-// Return: CSV String (Future)
+// Return: Map data structure (Future)
 // Method: HTTP Post Request
-Future<String> requestData(DateTimeRange dateTimeRange, Modul modul) async {
+Future<Map<String, List<dynamic>>> requestData(
+    DateTimeRange dateTimeRange, Modul modul) async {
   // not complete
   List modules;
   switch (modul) {
@@ -161,14 +162,27 @@ Future<String> requestData(DateTimeRange dateTimeRange, Modul modul) async {
     ]
   });
 
-  print(dateTimeRange.start.millisecondsSinceEpoch);
-
   // http post response
   Response response = await post(url,
       body: body, headers: {"Content-Type": "application/json"});
 
   // remove all points to prevent float bugs
-  String result = response.body.replaceAll('.', '');
+  String replace = response.body.replaceAll('.', '');
+
+  // convert csv String to Map
+  Map result = csvToMap(replace);
+
+  // crazy date fix
+  result['Datum'].forEach((datum) {
+    String string = datum.toString();
+    String newdatum =
+        '${string[4]}${string[5]}${string[6]}${string[7]}-${string[2]}${string[3]}-${string[0]}${string[1]}';
+    result['Datum'][result['Datum'].indexOf(datum)] = newdatum;
+  });
+  result['Uhrzeit'].forEach((uhr) {
+    result['Uhrzeit'][result['Uhrzeit'].indexOf(uhr)] = '${uhr.toString()}:00';
+  });
+
   return result;
 }
 
@@ -177,9 +191,9 @@ Future<double> getCurrentGreenEnergyPercentage() async {
   // time range from yesterday to now
   DateTimeRange dateTimeRange = DateTimeRange(
       start: DateTime.now().subtract(Duration(days: 1)), end: DateTime.now());
-  Map generation = csvToMap(await requestData(dateTimeRange, Modul.generation));
+  Map generation = await requestData(dateTimeRange, Modul.generation);
   Map forecastedGeneration =
-      csvToMap(await requestData(dateTimeRange, Modul.forecasted_generation));
+      await requestData(dateTimeRange, Modul.forecasted_generation);
 
   List renewable = [
     'Biomasse[MWh]',
@@ -211,12 +225,10 @@ Future<double> getCurrentGreenEnergyPercentage() async {
         break;
       }
     }
-    print('$index: $energy');
     ePowerGen += energy;
   });
   forecastedRenewable.forEach((index) {
     double energy = (forecastedGeneration[index].last).toDouble();
-    print('$index: $energy');
     ePowerGen += energy;
   });
   conventional.forEach((index) {
