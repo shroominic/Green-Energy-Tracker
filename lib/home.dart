@@ -18,11 +18,23 @@ class _MyHomePageState extends State<MyHomePage> {
   final title = "Green Energy Tracker";
 
   // share of renewable energies
-  var _percentage = "0";
+  double _percentage = 0;
+  double _percentageMinimum = 0;
+  double _percentageMaximum = 0;
 
-  set percentage(String percentage) {
+  init() {
+    loadData();
+  }
+
+  loadData() async {
+    await datamanager.init();
+    var percentage = await datamanager.currentGreenEnergyPercentage;
+    var percentageMaximum = await datamanager.greenEnergy24maximum;
+    var percentageMinimum = await datamanager.greenEnergy24minimum;
     setState(() {
       _percentage = percentage;
+      _percentageMaximum = percentageMaximum;
+      _percentageMinimum = percentageMinimum;
     });
   }
 
@@ -39,64 +51,148 @@ class _MyHomePageState extends State<MyHomePage> {
             Column(
               children: [
                 Spacer(
-                  flex: 1,
+                  flex: 2,
                 ),
                 Container(
                   decoration: BoxDecoration(
                       color: Colors.green[800],
                       borderRadius: BorderRadius.circular(10)),
                   child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: FutureBuilder(
-                        future: scraper.getCurrentGreenEnergyPercentage(),
-                        builder: (context, snapshot) {
-                          // filter null values
-                          if (snapshot.data != null) {
-                            _percentage = snapshot.data.toString();
-                          }
-                          return Column(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          Text(
+                            'Anteil der Erneuerbaren Energien:',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                '$_percentage',
+                                style: TextStyle(
+                                  fontSize: 69,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              Text(
+                                '%',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 42,
+                                  fontFamily: '',
+                                  fontStyle: FontStyle.italic,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      )),
+                ),
+                Row(
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10)),
+                      child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             mainAxisSize: MainAxisSize.min,
                             children: <Widget>[
                               Text(
-                                'Anteil der Erneuerbaren Energien:',
+                                '24h Minimum:',
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
-                                  color: Colors.white,
+                                  color: Colors.black,
                                 ),
                               ),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
-                                    '$_percentage',
+                                    '$_percentageMinimum',
                                     style: TextStyle(
-                                      fontSize: 69,
+                                      fontSize: 42,
                                       fontWeight: FontWeight.bold,
-                                      color: Colors.white,
+                                      color: Colors.black,
                                     ),
                                   ),
                                   Text(
                                     '%',
                                     style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 42,
+                                      color: Colors.black,
+                                      fontSize: 27,
                                       fontFamily: '',
                                       fontStyle: FontStyle.italic,
                                     ),
                                   ),
                                 ],
-                              )
+                              ),
                             ],
-                          );
-                        }),
-                  ),
+                          )),
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10)),
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            Text(
+                              '24h Maximum:',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  '$_percentageMaximum',
+                                  style: TextStyle(
+                                    fontSize: 42,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                Text(
+                                  '%',
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 27,
+                                    fontFamily: '',
+                                    fontStyle: FontStyle.italic,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-                Spacer(),
+                Spacer(
+                  flex: 3,
+                ),
               ],
             ),
           ],
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.refresh),
+        onPressed: init,
       ),
     );
   }
