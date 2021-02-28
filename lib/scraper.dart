@@ -186,6 +186,50 @@ Future<Map<String, List<dynamic>>> requestData(
   return result;
 }
 
+Future<Map<String, List<dynamic>>> requestGenerationDataAndFillMissing(
+    DateTimeRange dateTimeRange) async {
+  Map<String, List<dynamic>> result =
+      await requestData(dateTimeRange, Modul.generation);
+  Map<String, List<dynamic>> forecasted =
+      await requestData(dateTimeRange, Modul.forecasted_generation);
+
+  List forecastedRenewable = [
+    "Wind Offshore[MWh]",
+    "Wind Onshore[MWh]",
+    "Photovoltaik[MWh]"
+  ];
+  List other = [
+    'Biomasse[MWh]',
+    'Wasserkraft[MWh]',
+    'Sonstige Erneuerbare[MWh]',
+    'Kernenergie[MWh]',
+    'Braunkohle[MWh]',
+    'Steinkohle[MWh]',
+    'Erdgas[MWh]',
+    'Pumpspeicher[MWh]',
+    'Sonstige Konventionelle[MWh]'
+  ];
+  // Replaces empty data with forecasted data
+  forecastedRenewable.forEach((element) {
+    result[element].forEach((data) {
+      if (data == '-') {
+        int index = result[element].indexOf(data);
+        result[element][index] = forecasted[element][index];
+      }
+    });
+  });
+  other.forEach((element) {
+    result[element].forEach((data) {
+      if (data == '-') {
+        int index = result[element].indexOf(data);
+        if (index > 0) result[element][index] = result[element][index - 1];
+      }
+    });
+  });
+
+  return result;
+}
+
 // calculates current share of green energy
 Future<double> getCurrentGreenEnergyPercentage() async {
   // time range from yesterday to now
