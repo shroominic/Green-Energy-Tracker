@@ -175,6 +175,7 @@ Future<Map<String, List<dynamic>>> requestData(
   // crazy date fix
   result['Datum'].forEach((datum) {
     String string = datum.toString();
+    if (string.length == 7) string = '0$string';
     String newdatum =
         '${string[4]}${string[5]}${string[6]}${string[7]}-${string[2]}${string[3]}-${string[0]}${string[1]}';
     result['Datum'][result['Datum'].indexOf(datum)] = newdatum;
