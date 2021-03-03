@@ -26,7 +26,7 @@ class _MyHomePageState extends State<MyHomePage> {
     loadData();
   }
 
-  loadData() async {
+  Future<bool> loadData() async {
     await datamanager.init();
     var percentage = await datamanager.currentGreenEnergyPercentage;
     var percentageMaximum = await datamanager.greenEnergy24maximum;
@@ -36,6 +36,7 @@ class _MyHomePageState extends State<MyHomePage> {
       _percentageMaximum = percentageMaximum;
       _percentageMinimum = percentageMinimum;
     });
+    return true;
   }
 
   @override
@@ -202,7 +203,12 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.refresh),
+        child: FutureBuilder(
+          builder: (context, snapshot) {
+            return Icon(Icons.refresh);
+          },
+          future: init(),
+        ),
         onPressed: init,
       ),
     );

@@ -1,5 +1,5 @@
 name: greenET
-description: A new Flutter project.
+description: This app uses data from Smard de and provides information about the ratio of renewable energy in Germany (potentially more countrys in the future). If many people adjust their daily energy consumption to the availability of our green energy, it will help to stabilize the network and supports our environment.
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `pub publish`. This is preferred for private packages.
@@ -15,7 +15,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.0.0+1
+version: 1.0.0+2
 
 environment:
   sdk: ">=2.7.0 <3.0.0"

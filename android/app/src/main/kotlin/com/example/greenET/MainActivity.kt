@@ -1,4 +1,4 @@
-package com.example.greenET
+package de.drminic.greenET
 
 import io.flutter.embedding.android.FlutterActivity
 
