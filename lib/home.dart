@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'scraper.dart' as scraper;
+import 'package:greenET/info.dart';
 import 'data_manager.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -43,6 +43,17 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(title),
+        actions:  [
+          IconButton(
+            icon: Icon(Icons.help),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => InfoPage()),
+              );
+            },
+          ),
+        ],
       ),
       body: Center(
         child: Row(
