@@ -10,10 +10,10 @@ class InfoPage extends StatefulWidget {
 
 class _InfoPageState extends State<InfoPage> {
 
-String beschreibung = '''Die App Green Energy Tracker bietet eine Möglichkeit für jeden Einzelnen, etwas für die Umwelt zu tun, indem man seinen täglichen Stromverbrauch an die Verfügbarkeit von Erneuerbaren Energien anpasst.''';
+String beschreibung = '''Die App Green Energy Tracker bietet eine Möglichkeit für jeden Einzelnen, etwas für die Umwelt zu tun, indem man seinen täglichen Stromverbrauch an die Verfügbarkeit von erneuerbaren Energien anpasst.''';
 String erklaerungsText = '''
-Mit dem Anteil der Erneuerbaren Energien (%), kann man seinen Energiehaushalt an die Verfügbarkeit der Erneuerbaren Energien im deutschen Stromnetz anzupassen.
-Anhand des minimal und maximal Wertes kann man den Aktuellen Wert in Vergleich setzen. Dadurch kann man entscheiden ob gerade viel oder wenig erneuerbare Energien im Stromnetz sind. Der minimal/maximal Wert bezieht sich auf die letzten 24 Stunden. 
+Mit dem Anteil der erneuerbaren Energien (%), kann man seinen Energiehaushalt an die Verfügbarkeit der erneuerbaren Energien im deutschen Stromnetz anpassen.
+Anhand des minimalen und maximalen Wertes kann man den aktuellen Wert in Vergleich setzen. Dadurch kann man entscheiden, ob gerade viel oder wenig erneuerbare Energien im Stromnetz sind. Der minimal/maximal Wert bezieht sich auf die letzten 24 Stunden. 
 ''';
 String datenText = '''
 Alle Daten werden Intern berechnet und vom Server der Bundesnetzagentur (Smard.de) bezogen.
@@ -87,26 +87,22 @@ String lizenz = ''' 2021 Dominic Bäumer''';
                   ),
               ),
               Spacer(),
-              Card(
-                elevation: 0,
-                borderOnForeground: true,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                      Container(
-                        padding: EdgeInsets.all(5),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(Icons.copyright, size: 14,),
-                            Text(lizenz),
-                          ],
-                        ),
-                        )
-                    ],
-                  ),
-              ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                    Container(
+                      padding: EdgeInsets.all(5),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.copyright, size: 14,),
+                          Text(lizenz),
+                        ],
+                      ),
+                      )
+                  ],
+                ),
             ],
           ),
         ),
