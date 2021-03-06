@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:greenET/info.dart';
+import 'package:green_energy_tracker/info.dart';
 import 'data_manager.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -44,7 +44,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(title),
-        actions:  [
+        actions: [
           IconButton(
             icon: Icon(Icons.help),
             onPressed: () {

@@ -1,4 +1,4 @@
-name: greenET
+name: green_energy_tracker
 description: This app uses data from Smard de and provides information about the ratio of renewable energy in Germany (potentially more countrys in the future). If many people adjust their daily energy consumption to the availability of our green energy, it will help to stabilize the network and supports our environment.
 
 # The following line prevents the package from being accidentally published to
