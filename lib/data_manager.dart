@@ -4,7 +4,7 @@ import 'scraper.dart' as scraper;
 class DataManager {
   Future<void> init() async {
     gePercentage = await greenEnergyPercentage(DateTimeRange(
-        start: DateTime.now().subtract(Duration(days: 1)),
+        start: DateTime.now().subtract(Duration(days: 2)),
         end: DateTime.now()));
   }
 
